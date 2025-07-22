@@ -38,7 +38,7 @@ def login_page():
                 flex-direction: column;
                 align-items: center;
                 justify-content: start;
-                height: 30vh;
+                height: 5vh;
                 padding-top: 100px;
                 text-align: center;
             }
