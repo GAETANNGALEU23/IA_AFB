@@ -46,7 +46,7 @@ def login_page():
     """, unsafe_allow_html=True)
 
     st.image(get_logo(), width=150)
-    st.markdown("## Connexion à L'IA - FIRST BANK")
+    st.markdown("## CONNEXION IA - FIRST BANK")
     email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
     password = st.text_input("Mot de passe", type="password")
 
