@@ -37,8 +37,7 @@ def login_page():
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: start;
-                #height: 5vh;
+                justify-content: start
                 padding-top: 100px;
                 text-align: center;
             }
@@ -118,8 +117,7 @@ def main_page():
                 border: none;
                 resize: none;
                 background-color: transparent;
-                font-size: 16px;
-                #height: 10px;
+                font-size: 16px
                 padding-top: 10px;
             }
             .input-box button {
