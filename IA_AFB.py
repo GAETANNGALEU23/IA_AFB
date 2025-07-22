@@ -20,43 +20,50 @@ def init_session_state():
         st.session_state.history = []
     if "active_input" not in st.session_state:
         st.session_state.active_input = ""
-    if "logout_triggered" not in st.session_state:
-        st.session_state.logout_triggered = False
 
 init_session_state()
 
 # ------------------ LOGO AFRILAND ------------------
 @st.cache_resource
 def get_logo():
-    return Image.open("afriland_logo_1.png")  # Assure-toi que ce fichier est bien présent
+    return Image.open("afriland_logo_1.png")
 
 # ------------------ PAGE DE CONNEXION ------------------
 def login_page():
     st.markdown("""
         <style>
-            body { background-color: white; }
+            .centered {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 80vh;
+                text-align: center;
+            }
             .stButton button {
                 background-color: red;
                 color: white;
                 font-weight: bold;
                 border-radius: 8px;
-                padding: 8px 20px;
+                padding: 10px 30px;
             }
         </style>
     """, unsafe_allow_html=True)
 
-    st.image(get_logo(), width=150)
-    st.markdown("## CONNEXION IA - FIRST BANK")
-    email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
-    password = st.text_input("Mot de passe", type="password")
-
-    if st.button("Connexion"):
-        if email in USERS and USERS[email] == password:
-            st.session_state.authenticated = True
-            st.session_state.email = email
-            st.rerun()
-        else:
-            st.error("Email ou mot de passe incorrect.")
+    with st.container():
+        st.markdown('<div class="centered">', unsafe_allow_html=True)
+        st.image(get_logo(), width=180)
+        st.markdown("## CONNEXION IA - FIRST BANK")
+        email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
+        password = st.text_input("Mot de passe", type="password")
+        if st.button("Connexion"):
+            if email in USERS and USERS[email] == password:
+                st.session_state.authenticated = True
+                st.session_state.email = email
+                st.rerun()
+            else:
+                st.error("Email ou mot de passe incorrect.")
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # ------------------ PAGE PRINCIPALE ------------------
 def main_page():
@@ -69,47 +76,86 @@ def main_page():
                 st.session_state.active_input = hist
                 st.rerun()
         st.markdown("---")
-        st.markdown("👤 **Connecté :**")
-        st.markdown(f"`{st.session_state.email}`")
-        if st.button("🔓 Déconnexion"):
-            st.session_state.authenticated = False
-            st.session_state.email = ""
-            st.session_state.history = []
-            st.rerun()
 
-    # ---------------- Haut de page ----------------
+    # ---------------- Header ----------------
     st.markdown(f"""
-        <div style='display: flex; justify-content: space-between; align-items: center; 
-                    padding: 10px 20px; background-color: #f9f9f9; border-bottom: 1px solid #ddd;'>
+        <div style='display: flex; justify-content: space-between; align-items: center;
+                    padding: 12px 25px; background-color: #f9f9f9; border-bottom: 1px solid #ddd;'>
             <h2 style='color: red;'>🤖 AFRILAND IA</h2>
-            <span style='font-weight: bold;'>👤 {st.session_state.email}</span>
+            <div style='display: flex; align-items: center; gap: 20px;'>
+                <span style='font-weight: bold;'>👤 {st.session_state.email}</span>
+                <form action="" method="post">
+                    <button style='background-color: red; color: white; border: none; padding: 8px 18px; 
+                                   border-radius: 8px; cursor: pointer;' 
+                            onClick="window.location.reload();">
+                        🔓 Déconnexion
+                    </button>
+                </form>
+            </div>
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("## 💬 Posez votre question")
+    # ---------------- Main Content ----------------
+    st.markdown("""
+        <style>
+            .chat-container {
+                max-width: 900px;
+                margin: auto;
+                padding: 30px 20px;
+            }
+            .input-box {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background-color: #f0f2f6;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 10px;
+            }
+            .input-box textarea {
+                flex: 1;
+                border: none;
+                resize: none;
+                background-color: transparent;
+                font-size: 16px;
+                height: 80px;
+                padding-top: 10px;
+            }
+            .input-box button {
+                background-color: red;
+                border: none;
+                color: white;
+                border-radius: 6px;
+                padding: 10px;
+                font-size: 18px;
+                cursor: pointer;
+            }
+        </style>
+        <div class="chat-container">
+    """, unsafe_allow_html=True)
 
-    # ---------------- Zone réponse ----------------
     if st.session_state.active_input:
         st.info(f"**Dernière question :** {st.session_state.active_input}")
-    else:
-        st.info("Aucune question posée pour le moment.")
 
     st.download_button("📥 Télécharger la dernière saisie",
                        data=st.session_state.active_input.encode(),
                        file_name="question.txt")
 
-    # ---------------- Zone de saisie ----------------
-    st.markdown("---")
-    user_input = st.text_area("Entrez votre question ici :", 
-                              value=st.session_state.active_input, 
-                              height=150, label_visibility="collapsed")
+    st.markdown("""<br><div class="input-box">""", unsafe_allow_html=True)
 
-    if st.button("🚀 Envoyer"):
-        if user_input.strip():
-            st.session_state.history.append(user_input.strip())
-            st.session_state.active_input = user_input.strip()
-            st.success("Question enregistrée.")
-            st.rerun()
+    # Zone de saisie (comme ChatGPT)
+    user_input = st.text_area("", value="", height=80, label_visibility="collapsed", key="chat_input")
+
+    st.markdown("""
+        <button onclick="document.querySelector('button[kind=primary]').click()">➤</button>
+        </div></div>
+    """, unsafe_allow_html=True)
+
+    # Traitement côté serveur
+    if user_input.strip():
+        st.session_state.history.append(user_input.strip())
+        st.session_state.active_input = user_input.strip()
+        st.rerun()
 
 # ------------------ LANCEMENT ------------------
 if not st.session_state.authenticated:
