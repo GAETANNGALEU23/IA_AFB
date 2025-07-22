@@ -23,7 +23,7 @@ def init_session_state():
 # Logo image
 @st.cache_resource
 def get_logo():
-    return Image.open("afriland_logo.png")  # Place logo file in project folder
+    return Image.open("afriland_logo.png")  # Assure-toi que ce fichier est bien dans ton dossier
 
 # Login page
 def login_page():
@@ -65,6 +65,7 @@ def main_page():
                 st.session_state.active_input = hist
                 st.rerun()
 
+    # Custom styles
     st.markdown("""
         <style>
         .main-container {
@@ -83,10 +84,13 @@ def main_page():
         .header h3 {
             color: black;
         }
-        .header .logout {
+        .logout {
             background-color: red;
             color: white;
             font-weight: bold;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
         }
         .info-box {
             background-color: white;
@@ -95,9 +99,31 @@ def main_page():
             margin-top: 20px;
             min-height: 200px;
         }
+        .chat-input-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 6px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        textarea {
+            border-radius: 10px !important;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .submit-button {
+            float: right;
+            margin-top: 10px;
+            background-color: red;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            padding: 8px 16px;
+        }
         </style>
     """, unsafe_allow_html=True)
 
+    # Header
     st.markdown(f"""
     <div class="header">
         <h3>{st.session_state.email}</h3>
@@ -122,15 +148,17 @@ def main_page():
     st.download_button("📥 Télécharger", data=st.session_state.active_input.encode(), file_name="info.txt")
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # Input zone
-    st.markdown("---")
-    input_text = st.text_area("Zone de saisie", value=st.session_state.active_input, height=150)
-    if st.button("Soumettre"):
-        if input_text:
-            st.session_state.history.append(input_text)
-            st.session_state.active_input = input_text
+    # Input zone façon ChatGPT
+    st.markdown("<div class='chat-input-container'>", unsafe_allow_html=True)
+    input_text = st.text_area("💬 Posez votre question ici", value=st.session_state.active_input, height=120, label_visibility="collapsed")
+    
+    if st.button("🚀 Envoyer", key="submit_btn"):
+        if input_text.strip():
+            st.session_state.history.append(input_text.strip())
+            st.session_state.active_input = input_text.strip()
             st.rerun()
 
+    st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 # Entry point
