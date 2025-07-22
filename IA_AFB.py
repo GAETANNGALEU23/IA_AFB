@@ -119,7 +119,7 @@ def main_page():
                 resize: none;
                 background-color: transparent;
                 font-size: 16px;
-                height: 80px;
+                height: 30px;
                 padding-top: 10px;
             }
             .input-box button {
