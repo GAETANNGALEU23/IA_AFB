@@ -28,7 +28,7 @@ init_session_state()
 # ------------------ LOGO AFRILAND ------------------
 @st.cache_resource
 def get_logo():
-    return Image.open("afriland_logo.png")  # Assure-toi que ce fichier est bien présent
+    return Image.open("afriland_logo_1.png")  # Assure-toi que ce fichier est bien présent
 
 # ------------------ PAGE DE CONNEXION ------------------
 def login_page():
@@ -46,7 +46,7 @@ def login_page():
     """, unsafe_allow_html=True)
 
     st.image(get_logo(), width=150)
-    st.markdown("## Connexion à Afriland First Bank")
+    st.markdown("## Connexion à L'IA - FIRST BANK")
     email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
     password = st.text_input("Mot de passe", type="password")
 
