@@ -3,7 +3,7 @@ from PIL import Image
 import datetime
 
 # ------------------ CONFIGURATION ------------------
-st.set_page_config(page_title="AFRILAND IA", layout="wide"). je veux que ma page de connexion soit sous la forme d'un poppop comme le tien ChatGPT. ne me decois pas stp 
+st.set_page_config(page_title="AFRILAND IA", layout="wide") 
 
 USERS = {
     "user@afriland.cm": "password123",
