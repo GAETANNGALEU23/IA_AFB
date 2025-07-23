@@ -1,6 +1,5 @@
 import streamlit as st
 from PIL import Image
-import datetime
 
 # ------------------ CONFIGURATION ------------------
 st.set_page_config(page_title="AFRILAND IA", layout="wide")
@@ -10,7 +9,6 @@ USERS = {
     "admin@afriland.cm": "adminpass"
 }
 
-# ------------------ INITIALISATION ------------------
 def init_session_state():
     if "authenticated" not in st.session_state:
         st.session_state.authenticated = False
@@ -25,7 +23,7 @@ def init_session_state():
 
 init_session_state()
 
-# ------------------ LOGO AFRILAND ------------------
+# ------------------ LOGO ------------------
 @st.cache_resource
 def get_logo():
     return Image.open("afriland_logo_1.png")
@@ -34,13 +32,20 @@ def get_logo():
 def login_page():
     st.markdown("""
         <style>
-            .overlay {
+            html, body, [data-testid="stApp"] {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background-color: #f0f2f6;
+            }
+
+            .login-container {
                 position: fixed;
                 top: 0;
                 left: 0;
-                width: 100vw;
                 height: 100vh;
-                background-color: rgba(0, 0, 0, 0.4);
+                width: 100vw;
+                background-color: rgba(0, 0, 0, 0.5);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -62,7 +67,7 @@ def login_page():
                 margin-bottom: 25px;
             }
 
-            .stTextInput > div > input, .stTextInput input {
+            .stTextInput input {
                 text-align: center;
             }
 
@@ -75,28 +80,26 @@ def login_page():
                 margin-top: 10px;
             }
         </style>
-
-        <div class="overlay">
-            <div class="login-box">
     """, unsafe_allow_html=True)
 
-    st.image(get_logo(), width=120)
-    st.markdown("## CONNEXION IA - FIRST BANK")
-    email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
-    password = st.text_input("Mot de passe", type="password")
+    # Boîte d'authentification
+    with st.container():
+        st.markdown('<div class="login-container"><div class="login-box">', unsafe_allow_html=True)
+        st.image(get_logo(), width=100)
+        st.markdown("## CONNEXION IA - FIRST BANK")
 
-    if st.button("Connexion"):
-        if email in USERS and USERS[email] == password:
-            st.session_state.authenticated = True
-            st.session_state.email = email
-            st.rerun()
-        else:
-            st.error("Email ou mot de passe incorrect.")
+        email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
+        password = st.text_input("Mot de passe", type="password")
 
-    st.markdown("""
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+        if st.button("Connexion"):
+            if email in USERS and USERS[email] == password:
+                st.session_state.authenticated = True
+                st.session_state.email = email
+                st.rerun()
+            else:
+                st.error("Email ou mot de passe incorrect.")
+
+        st.markdown("</div></div>", unsafe_allow_html=True)
 
 # ------------------ PAGE PRINCIPALE ------------------
 def main_page():
@@ -126,59 +129,7 @@ def main_page():
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
-        <style>
-            .chat-container {
-                max-width: 900px;
-                margin: auto;
-                padding: 30px 20px;
-            }
-            .input-box {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                background-color: #f0f2f6;
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                padding: 10px;
-            }
-            .input-box textarea {
-                flex: 1;
-                border: none;
-                resize: none;
-                background-color: transparent;
-                font-size: 16px;
-                padding-top: 10px;
-            }
-            .input-box button {
-                background-color: red;
-                border: none;
-                color: white;
-                border-radius: 6px;
-                padding: 10px 16px;
-                font-size: 18px;
-                cursor: pointer;
-            }
-        </style>
-        <div class="chat-container">
-    """, unsafe_allow_html=True)
-
-    if st.session_state.active_input:
-        st.info(f"**Dernière question :** {st.session_state.active_input}")
-
-    st.download_button("📥 Télécharger",
-                       data=st.session_state.active_input.encode(),
-                       file_name="question.txt")
-
-    with st.form("form_input", clear_on_submit=True):
-        user_input = st.text_area("", value="", height=80, label_visibility="collapsed")
-        submitted = st.form_submit_button("➤")
-        st.markdown('</div></div>', unsafe_allow_html=True)
-
-        if submitted and user_input.strip():
-            st.session_state.active_input = user_input.strip()
-            st.session_state.history.append(user_input.strip())
-            st.rerun()
+    st.write("Bienvenue dans l'interface IA.")
 
 # ------------------ LANCEMENT ------------------
 if not st.session_state.authenticated:
