@@ -1,4 +1,3 @@
-# ------------------ PAGE DE CONNEXION ------------------
 def login_page():
     st.markdown("""
         <style>
@@ -14,31 +13,32 @@ def login_page():
                 z-index: 9999;
             }
 
-            /* Carte centrale (la popup) */
+            /* Fenêtre popup */
             .login-popup {
                 background-color: white;
-                padding: 40px 30px;
+                padding: 30px 25px;
                 border-radius: 16px;
                 box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
                 text-align: center;
                 width: 100%;
-                max-width: 400px;
+                max-width: 320px;
             }
 
             .login-popup h2 {
                 color: #d10000;
-                margin-bottom: 20px;
+                margin-bottom: 25px;
+                font-size: 20px;
             }
 
             .stTextInput > div > input {
-                padding: 10px;
+                padding: 8px;
                 border-radius: 8px;
                 border: 1px solid #ccc;
-                width: 100%;
+                font-size: 14px;
             }
 
             .stTextInput {
-                margin-bottom: 20px;
+                margin-bottom: 15px;
             }
 
             .stButton button {
@@ -46,11 +46,11 @@ def login_page():
                 color: white;
                 font-weight: bold;
                 border-radius: 8px;
-                padding: 10px 20px;
+                padding: 8px 0;
                 width: 100%;
+                font-size: 14px;
             }
 
-            /* Cache le reste de la page (barres, etc.) */
             header, footer, .stSidebar {
                 display: none !important;
             }
@@ -58,13 +58,13 @@ def login_page():
 
         <div class="overlay">
             <div class="login-popup">
-                <img src="https://i.ibb.co/ZGr9F67/afriland-logo-small.png" width="100"/>
+                <img src="https://i.ibb.co/ZGr9F67/afriland-logo-small.png" width="80"/>
                 <h2>Connexion AFRILAND IA</h2>
             </div>
         </div>
     """, unsafe_allow_html=True)
 
-    # Utiliser des conteneurs invisibles pour s’injecter dans la popup
+    # Conteneur invisible pour insérer les champs dans le centre
     col1, col2, col3 = st.columns([3, 6, 3])
     with col2:
         email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm", label_visibility="collapsed")
