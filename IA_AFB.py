@@ -1,3 +1,6 @@
+import streamlit as st
+from PIL import Image
+
 # ------------------ CONFIGURATION ------------------
 st.set_page_config(page_title="AFRILAND IA", layout="wide")
 
@@ -34,7 +37,8 @@ def login_page():
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: start
+                justify-content: start;
+                height: 100vh;
                 padding-top: 100px;
                 text-align: center;
             }
@@ -114,7 +118,8 @@ def main_page():
                 border: none;
                 resize: none;
                 background-color: transparent;
-                font-size: 16px
+                font-size: 16px;
+                height: 80px;
                 padding-top: 10px;
             }
             .input-box button {
@@ -133,12 +138,13 @@ def main_page():
     if st.session_state.active_input:
         st.info(f"**Dernière question :** {st.session_state.active_input}")
 
-    st.download_button("📥 Télécharger",
+    st.download_button("📥 Télécharger la dernière saisie",
                        data=st.session_state.active_input.encode(),
                        file_name="question.txt")
 
     # Zone de saisie (type ChatGPT)
     with st.form("form_input", clear_on_submit=True):
+        st.markdown('<div class="input-box">', unsafe_allow_html=True)
         user_input = st.text_area("", value="", height=80, label_visibility="collapsed")
         submitted = st.form_submit_button("➤")
         st.markdown('</div></div>', unsafe_allow_html=True)
@@ -152,4 +158,4 @@ def main_page():
 if not st.session_state.authenticated:
     login_page()
 else:
-    main_page() 
+    main_page()
