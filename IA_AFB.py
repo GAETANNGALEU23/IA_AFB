@@ -1,5 +1,5 @@
 def login_page():
-    st.markdown("""
+    st.markdown(
         <style>
             html, body, [class*="css"] {
                 height: 100%;
