@@ -1,19 +1,35 @@
+import streamlit as st
+
+# ------------------ CONFIGURATION ------------------
+st.set_page_config(page_title="AFRILAND IA", layout="centered")
+
+# ------------------ CREDENTIELS SIMULÉS ------------------
+USERS = {
+    "user@afriland.cm": "password123",
+    "admin@afriland.cm": "adminpass"
+}
+
+# ------------------ SESSION ------------------
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+if "email" not in st.session_state:
+    st.session_state.email = ""
+
+# ------------------ PAGE DE CONNEXION ------------------
 def login_page():
-    # Appliquer un style global pour centrer le formulaire
     st.markdown("""
         <style>
             .login-container {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 80vh;
-                background-color: #f5f5f5;
+                height: 75vh;
             }
             .login-box {
                 background-color: white;
                 padding: 40px 30px;
                 border-radius: 12px;
-                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
                 width: 100%;
                 max-width: 400px;
                 text-align: center;
@@ -29,14 +45,11 @@ def login_page():
         </style>
     """, unsafe_allow_html=True)
 
-    # Structure centrée
     st.markdown('<div class="login-container"><div class="login-box">', unsafe_allow_html=True)
-    
-    st.image(get_logo(), width=100)
-    st.markdown("## CONNEXION IA")
+    st.title("Connexion IA")
 
     email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
-    password = st.text_input("Mot de passe", type="password", placeholder="Votre mot de passe")
+    password = st.text_input("Mot de passe", type="password")
 
     if st.button("Connexion"):
         if email in USERS and USERS[email] == password:
@@ -47,3 +60,14 @@ def login_page():
             st.error("Email ou mot de passe incorrect.")
 
     st.markdown('</div></div>', unsafe_allow_html=True)
+
+# ------------------ PAGE PRINCIPALE ------------------
+def main_page():
+    st.success(f"Bienvenue, {st.session_state.email} ! 🎉")
+    st.write("Ceci est la page principale.")
+
+# ------------------ ROUTAGE ------------------
+if not st.session_state.authenticated:
+    login_page()
+else:
+    main_page()
