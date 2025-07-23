@@ -1,32 +1,34 @@
 def login_page():
     st.markdown("""
         <style>
-            /* Overlay de fond */
+            /* Fond d'écran semi-transparent */
             .overlay {
                 position: fixed;
                 top: 0; left: 0;
                 width: 100%; height: 100%;
                 background-color: rgba(0, 0, 0, 0.6);
-                display: flex;
-                justify-content: center;
-                align-items: center;
                 z-index: 9999;
             }
 
-            /* Fenêtre popup */
-            .login-popup {
+            /* Boîte centrale */
+            .login-container {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
                 background-color: white;
-                padding: 30px 25px;
+                padding: 30px;
                 border-radius: 16px;
-                box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
-                text-align: center;
+                box-shadow: 0 0 25px rgba(0,0,0,0.3);
                 width: 100%;
-                max-width: 320px;
+                max-width: 340px;
+                z-index: 10000;
+                text-align: center;
             }
 
-            .login-popup h2 {
+            .login-container h2 {
                 color: #d10000;
-                margin-bottom: 25px;
+                margin-bottom: 20px;
                 font-size: 20px;
             }
 
@@ -37,16 +39,12 @@ def login_page():
                 font-size: 14px;
             }
 
-            .stTextInput {
-                margin-bottom: 15px;
-            }
-
             .stButton button {
                 background-color: red;
                 color: white;
                 font-weight: bold;
                 border-radius: 8px;
-                padding: 8px 0;
+                padding: 8px;
                 width: 100%;
                 font-size: 14px;
             }
@@ -55,20 +53,18 @@ def login_page():
                 display: none !important;
             }
         </style>
-
-        <div class="overlay">
-            <div class="login-popup">
-                <img src="https://i.ibb.co/ZGr9F67/afriland-logo-small.png" width="80"/>
-                <h2>Connexion AFRILAND IA</h2>
-            </div>
-        </div>
+        <div class="overlay"></div>
     """, unsafe_allow_html=True)
 
-    # Conteneur invisible pour insérer les champs dans le centre
-    col1, col2, col3 = st.columns([3, 6, 3])
-    with col2:
+    # Le contenu réel de la popup (centré via Streamlit)
+    with st.container():
+        st.markdown('<div class="login-container">', unsafe_allow_html=True)
+        st.image("afriland_logo_1.png", width=80)
+        st.markdown('<h2>Connexion AFRILAND IA</h2>', unsafe_allow_html=True)
+
         email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm", label_visibility="collapsed")
         password = st.text_input("Mot de passe", type="password", label_visibility="collapsed")
+
         if st.button("Connexion"):
             if email in USERS and USERS[email] == password:
                 st.session_state.authenticated = True
@@ -76,3 +72,5 @@ def login_page():
                 st.rerun()
             else:
                 st.error("Email ou mot de passe incorrect.")
+
+        st.markdown("</div>", unsafe_allow_html=True)
