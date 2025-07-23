@@ -59,7 +59,7 @@ def login_page():
     # Le contenu réel de la popup (centré via Streamlit)
     with st.container():
         st.markdown('<div class="login-container">', unsafe_allow_html=True)
-        st.image("afriland_logo_1.png", width=80
+        st.image("afriland_logo_1.png", width=80)
         st.markdown('<h2>Connexion AFRILAND IA</h2>', unsafe_allow_html=True)
 
         email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm", label_visibility="collapsed")
