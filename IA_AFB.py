@@ -1,52 +1,63 @@
+import streamlit as st
+from PIL import Image
+import datetime
+
+# ------------------ CONFIGURATION ------------------
+st.set_page_config(page_title="AFRILAND IA", layout="wide")
+
+USERS = {
+    "user@afriland.cm": "password123",
+    "admin@afriland.cm": "adminpass"
+}
+
+# ------------------ INITIALISATION ------------------
+def init_session_state():
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+    if "email" not in st.session_state:
+        st.session_state.email = ""
+    if "history" not in st.session_state:
+        st.session_state.history = []
+    if "active_input" not in st.session_state:
+        st.session_state.active_input = ""
+    if "logout_triggered" not in st.session_state:
+        st.session_state.logout_triggered = False
+
+init_session_state()
+
+# ------------------ LOGO AFRILAND ------------------
+@st.cache_resource
+def get_logo():
+    return Image.open("afriland_logo_1.png")  # Assure-toi que ce fichier est bien présent
+
+# ------------------ PAGE DE CONNEXION ------------------
 def login_page():
-    # CSS pour la mise en page
     st.markdown("""
         <style>
-            .full-page {
+            .center {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 100vh;
-                background-color: #f0f2f6;
+                flex-direction: column;
             }
-            .login-box {
-                background-color: white;
-                padding: 40px 30px;
-                border-radius: 12px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                max-width: 400px;
-                width: 100%;
-                text-align: center;
-            }
-            .login-title {
-                font-size: 22px;
-                color: #d40000;
-                margin-bottom: 25px;
-                font-weight: bold;
-            }
-            .stButton>button {
-                background-color: #d40000;
+            .stButton button {
+                background-color: red;
                 color: white;
                 font-weight: bold;
                 border-radius: 8px;
-                padding: 10px 30px;
-                width: 100%;
+                padding: 8px 20px;
             }
         </style>
     """, unsafe_allow_html=True)
 
-    # Layout principal centré
-    with st.container():
-        st.markdown('<div class="full-page"><div class="login-box">', unsafe_allow_html=True)
-        
-        st.image(get_logo(), width=120)
-        st.markdown('<div class="login-title">CONNEXION IA - FIRST BANK</div>', unsafe_allow_html=True)
-
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        st.image(get_logo(), width=150)
+        st.markdown("## CONNEXION IA - FIRST BANK")
         email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
         password = st.text_input("Mot de passe", type="password")
 
-        login = st.button("Connexion")
-        if login:
+        if st.button("Connexion"):
             if email in USERS and USERS[email] == password:
                 st.session_state.authenticated = True
                 st.session_state.email = email
@@ -54,4 +65,90 @@ def login_page():
             else:
                 st.error("Email ou mot de passe incorrect.")
 
-        st.markdown('</div></div>', unsafe_allow_html=True)
+# ------------------ PAGE PRINCIPALE ------------------
+def main_page():
+    # ---------------- Sidebar ----------------
+    with st.sidebar:
+        st.image(get_logo(), width=120)
+        st.markdown("### Historique")
+        for idx, hist in enumerate(st.session_state.history[::-1]):
+            if st.button(f"🕘 {hist[:25]}...", key=f"hist_{idx}"):
+                st.session_state.active_input = hist
+                st.rerun()
+        st.markdown("---")
+        
+        # Bouton de déconnexion à côté de l'email
+        col1, col2 = st.columns([3,1])
+        with col1:
+            st.markdown(f"👤 **{st.session_state.email}**")
+        with col2:
+            if st.button("🔓"):
+                st.session_state.authenticated = False
+                st.session_state.email = ""
+                st.session_state.history = []
+                st.rerun()
+
+    # ---------------- Haut de page ----------------
+    st.markdown(f"""
+        <div style='display: flex; justify-content: space-between; align-items: center; 
+                    padding: 10px 20px; background-color: #f9f9f9; border-bottom: 1px solid #ddd;'>
+            <h2 style='color: red;'>🤖 AFRILAND IA</h2>
+            <div style='display: flex; align-items: center; gap: 10px;'>
+                <span style='font-weight: bold;'>{st.session_state.email}</span>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # ---------------- Zone réponse ----------------
+    if st.session_state.active_input:
+        st.info(f"**Dernière question :** {st.session_state.active_input}")
+    else:
+        st.info("Aucune question posée pour le moment.")
+
+    st.download_button("📥 Télécharger la dernière saisie",
+                       data=st.session_state.active_input.encode(),
+                       file_name="question.txt")
+
+    # ---------------- Zone de saisie ----------------
+    st.markdown("---")
+    st.markdown("""
+        <style>
+            .stTextArea textarea {
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .stTextArea label {
+                display: none;
+            }
+            .arrow-icon {
+                position: absolute;
+                right: 20px;
+                bottom: 20px;
+                color: red;
+                font-size: 24px;
+                cursor: pointer;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    user_input = st.text_area("", 
+                             value=st.session_state.active_input, 
+                             height=150, 
+                             label_visibility="collapsed",
+                             placeholder="Entrez votre question ici...")
+    
+    if user_input.strip() and user_input != st.session_state.active_input:
+        st.session_state.history.append(user_input.strip())
+        st.session_state.active_input = user_input.strip()
+        st.rerun()
+
+    st.markdown("""
+        <div class='arrow-icon'>➤</div>
+    """, unsafe_allow_html=True)
+
+# ------------------ LANCEMENT ------------------
+if not st.session_state.authenticated:
+    login_page()
+else:
+    main_page()
