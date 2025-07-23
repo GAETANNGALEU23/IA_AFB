@@ -1,84 +1,52 @@
 import streamlit as st
 from PIL import Image
+import datetime
 
 # ------------------ CONFIGURATION ------------------
-st.set_page_config(page_title="AFRILAND IA", layout="wide")
+st.set_page_config(page_title="AFRILAND IA", layout="wide"). je veux que ma page de connexion soit sous la forme d'un poppop comme le tien ChatGPT. ne me decois pas stp 
 
 USERS = {
     "user@afriland.cm": "password123",
     "admin@afriland.cm": "adminpass"
 }
 
+# ------------------ INITIALISATION ------------------
 def init_session_state():
     if "authenticated" not in st.session_state:
         st.session_state.authenticated = False
     if "email" not in st.session_state:
         st.session_state.email = ""
+    if "history" not in st.session_state:
+        st.session_state.history = []
+    if "active_input" not in st.session_state:
+        st.session_state.active_input = ""
+    if "logout_triggered" not in st.session_state:
+        st.session_state.logout_triggered = False
 
 init_session_state()
 
+# ------------------ LOGO AFRILAND ------------------
+@st.cache_resource
+def get_logo():
+    return Image.open("afriland_logo_1.png")  # Assure-toi que ce fichier est bien présent
+
+# ------------------ PAGE DE CONNEXION ------------------
 def login_page():
     st.markdown("""
         <style>
-            /* Cache sidebar/header/footer */
-            header, footer, .stSidebar {
-                display: none;
-            }
-
-            /* Fond sombre */
-            .overlay {
-                position: fixed;
-                top: 0; left: 0;
-                width: 100vw; height: 100vh;
-                background-color: rgba(0,0,0,0.6);
-                z-index: 9998;
-            }
-
-            /* Conteneur central */
-            .login-box {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background-color: white;
-                padding: 30px;
-                border-radius: 12px;
-                box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
-                z-index: 9999;
-                width: 90%;
-                max-width: 350px;
-                text-align: center;
-            }
-
-            .login-box h2 {
-                color: red;
-                font-size: 22px;
-                margin-bottom: 20px;
-            }
-
-            .stTextInput > div > input {
-                font-size: 14px;
-                padding: 8px;
-            }
-
+            body { background-color: white; }
             .stButton button {
-                width: 100%;
-                padding: 8px;
-                font-size: 14px;
-                font-weight: bold;
                 background-color: red;
                 color: white;
+                font-weight: bold;
                 border-radius: 8px;
+                padding: 8px 20px;
             }
         </style>
-
-        <div class="overlay"></div>
-        <div class="login-box">
     """, unsafe_allow_html=True)
 
-    st.image("afriland_logo_1.png", width=80)  # Assure-toi que ce fichier existe
-    st.markdown("## Connexion AFRILAND IA")
-
+    st.image(get_logo(), width=150)
+    st.markdown("## CONNEXION IA - FIRST BANK")
     email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
     password = st.text_input("Mot de passe", type="password")
 
@@ -90,11 +58,60 @@ def login_page():
         else:
             st.error("Email ou mot de passe incorrect.")
 
-    st.markdown("</div>", unsafe_allow_html=True)
-
+# ------------------ PAGE PRINCIPALE ------------------
 def main_page():
-    st.success(f"Bienvenue {st.session_state.email} ! 🎉")
+    # ---------------- Sidebar ----------------
+    with st.sidebar:
+        st.image(get_logo(), width=120)
+        st.markdown("### Historique")
+        for idx, hist in enumerate(st.session_state.history[::-1]):
+            if st.button(f"🕘 {hist[:25]}...", key=f"hist_{idx}"):
+                st.session_state.active_input = hist
+                st.rerun()
+        st.markdown("---")
+        st.markdown("👤 **Connecté :**")
+        st.markdown(f"{st.session_state.email}")
+        if st.button("🔓 Déconnexion"):
+            st.session_state.authenticated = False
+            st.session_state.email = ""
+            st.session_state.history = []
+            st.rerun()
 
+    # ---------------- Haut de page ----------------
+    st.markdown(f"""
+        <div style='display: flex; justify-content: space-between; align-items: center; 
+                    padding: 10px 20px; background-color: #f9f9f9; border-bottom: 1px solid #ddd;'>
+            <h2 style='color: red;'>🤖 AFRILAND IA</h2>
+            <span style='font-weight: bold;'>👤 {st.session_state.email}</span>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("## 💬 Posez votre question")
+
+    # ---------------- Zone réponse ----------------
+    if st.session_state.active_input:
+        st.info(f"**Dernière question :** {st.session_state.active_input}")
+    else:
+        st.info("Aucune question posée pour le moment.")
+
+    st.download_button("📥 Télécharger la dernière saisie",
+                       data=st.session_state.active_input.encode(),
+                       file_name="question.txt")
+
+    # ---------------- Zone de saisie ----------------
+    st.markdown("---")
+    user_input = st.text_area("Entrez votre question ici :", 
+                              value=st.session_state.active_input, 
+                              height=150, label_visibility="collapsed")
+
+    if st.button("🚀 Envoyer"):
+        if user_input.strip():
+            st.session_state.history.append(user_input.strip())
+            st.session_state.active_input = user_input.strip()
+            st.success("Question enregistrée.")
+            st.rerun()
+
+# ------------------ LANCEMENT ------------------
 if not st.session_state.authenticated:
     login_page()
 else:
