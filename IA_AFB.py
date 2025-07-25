@@ -140,9 +140,9 @@ def main_page():
     if st.session_state.active_input:
         st.info(f"**Dernière question :** {st.session_state.active_input}")
 
-    st.download_button("📥 Télécharger",
-                       data=st.session_state.active_input.encode(),
-                       file_name="question.xlsx")
+    #st.download_button("📥 Télécharger",
+                       #data=st.session_state.active_input.encode(),
+                       #file_name="question.xlsx")
 
     # Zone de saisie (type ChatGPT)
     with st.form("form_input", clear_on_submit=True):
