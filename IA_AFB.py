@@ -34,43 +34,25 @@ def get_logo():
 # ------------------ PAGE DE CONNEXION ------------------
 
 
-
-
 def login_page():
     st.markdown("""
         <style>
-            body {
-                background-color: #f7f9fc;
-            }
-
             .login-container {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                height: 100vh;
-                animation: fadeIn 1.2s ease-in;
-                background: linear-gradient(135deg, #f8f9fb 0%, #edf1f5 100%);
-            }
-
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-20px); }
-                to { opacity: 1; transform: translateY(0); }
+                height: 90vh;
             }
 
             .login-box {
                 background-color: #ffffff;
                 padding: 40px 30px;
                 border-radius: 16px;
-                box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
                 width: 100%;
                 max-width: 400px;
                 text-align: center;
-                transition: all 0.3s ease;
-            }
-
-            .login-box:hover {
-                box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
             }
 
             .login-title {
@@ -99,11 +81,6 @@ def login_page():
                 padding: 12px 24px;
                 width: 100%;
                 font-size: 16px;
-                transition: background-color 0.3s ease;
-            }
-
-            .stButton > button:hover {
-                background-color: #a00000;
             }
 
             .logo-img {
@@ -114,7 +91,7 @@ def login_page():
 
     st.markdown('<div class="login-container"><div class="login-box">', unsafe_allow_html=True)
 
-    st.image(get_logo(), width=100)
+    st.image(get_logo(), width=100, output_format="PNG", use_column_width=False)
     st.markdown('<div class="login-title">CONNEXION IA - FIRST BANK</div>', unsafe_allow_html=True)
 
     email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
@@ -129,6 +106,9 @@ def login_page():
             st.error("Email ou mot de passe incorrect.")
 
     st.markdown('</div></div>', unsafe_allow_html=True)
+
+
+
 
 
 # ------------------ PAGE PRINCIPALE ------------------
