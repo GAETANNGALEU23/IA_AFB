@@ -48,7 +48,7 @@ def login_page():
                 color: white;
                 font-weight: bold;
                 border-radius: 8px;
-                padding: 10px 30px;
+                padding: 10px 10px;
             }
         </style>
     """, unsafe_allow_html=True)
