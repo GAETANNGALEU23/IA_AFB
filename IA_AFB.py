@@ -81,7 +81,7 @@ def main_page():
         st.markdown("---")
         
         # Menu utilisateur en bas de la sidebar
-        with st.expander("👤 Paramètres utilisateur", expanded=False):
+        with st.expander("👤", expanded=False):
             st.markdown(f"**{st.session_state.email}**")
             if st.button("🔓 Déconnexion"):
                 st.session_state.authenticated = False
@@ -92,7 +92,7 @@ def main_page():
     st.markdown(f"""
         <div style='display: flex; justify-content: space-between; align-items: center;
                     padding: 12px 25px; background-color: #f9f9f9; border-bottom: 1px solid #ddd;'>
-            <h2 style='color: red;'>🤖 AFRILAND IA</h2>
+           <center> <h2 style='color: red;'>🤖 AFRILAND IA</h2></center>
         </div>
     """, unsafe_allow_html=True)
 
