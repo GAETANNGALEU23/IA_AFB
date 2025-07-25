@@ -1,16 +1,20 @@
 import streamlit as st
 from PIL import Image
 
-
-# Masquer le menu Streamlit et le footer
+# Masquer tous les éléments par défaut Streamlit
 hide_streamlit_style = """
     <style>
-    #MainMenu {visibility: hidden;}   /* Masque le menu hamburger */
-    footer {visibility: hidden;}     /* Masque le footer "Made with Streamlit" */
-    header {visibility: hidden;}     /* Masque l'en-tête par défaut */
+    #MainMenu {visibility: hidden;}        /* Masque le menu hamburger */
+    footer {visibility: hidden;}           /* Masque le footer */
+    header {visibility: hidden;}           /* Masque l'en-tête */
+
+    /* Masquer le bouton "Deploy" et "Manage app" en bas à droite */
+    div[data-testid="stStatusWidget"] {display: none !important;}
+    div.stAppDeployButton {display: none !important;}
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 
 
 
