@@ -40,7 +40,7 @@ def login_page():
                 flex-direction: column;
                 align-items: center;
                 justify-content: start
-                padding-top: 100px;
+                padding-top: 50px;
                 text-align: center;
             }
             .stButton button {
@@ -58,7 +58,7 @@ def login_page():
     st.markdown("## CONNEXION IA - FIRST BANK")
     email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
     password = st.text_input("Mot de passe", type="password")
-    if st.button("Connexion"):
+    if st.button("CONNEXION"):
         if email in USERS and USERS[email] == password:
             st.session_state.authenticated = True
             st.session_state.email = email
