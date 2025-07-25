@@ -1,3 +1,71 @@
+import streamlit as st
+from PIL import Image
+import datetime
+
+
+# ------------------ CONFIGURATION ------------------
+st.set_page_config(page_title="AFRILAND IA", layout="wide")
+
+USERS = {
+    "user@afriland.cm": "password123",
+    "admin@afriland.cm": "adminpass"
+}
+
+# ------------------ INITIALISATION ------------------
+def init_session_state():
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+    if "email" not in st.session_state:
+        st.session_state.email = ""
+    if "history" not in st.session_state:
+        st.session_state.history = []
+    if "active_input" not in st.session_state:
+        st.session_state.active_input = ""
+    if "new_input" not in st.session_state:
+        st.session_state.new_input = ""
+
+init_session_state()
+
+# ------------------ LOGO AFRILAND ------------------
+@st.cache_resource
+def get_logo():
+    return Image.open("afriland_logo_1.png")
+
+# ------------------ PAGE DE CONNEXION ------------------
+def login_page():
+    st.markdown("""
+        <style>
+            .centered {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: start
+                padding-top: 100px;
+                text-align: center;
+            }
+            .stButton button {
+                background-color: red;
+                color: white;
+                font-weight: bold;
+                border-radius: 8px;
+                padding: 10px 30px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<div class="centered">', unsafe_allow_html=True)
+    st.image(get_logo(), width=180)
+    st.markdown("## CONNEXION IA - FIRST BANK")
+    email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
+    password = st.text_input("Mot de passe", type="password")
+    if st.button("Connexion"):
+        if email in USERS and USERS[email] == password:
+            st.session_state.authenticated = True
+            st.session_state.email = email
+            st.rerun()
+        else:
+            st.error("Email ou mot de passe incorrect.")
+    st.markdown('</div>', unsafe_allow_html=True)
 # ------------------ PAGE PRINCIPALE ------------------
 def main_page():
     # ---------------- Sidebar ----------------
@@ -22,10 +90,9 @@ def main_page():
 
     # ---------------- Header ----------------
     st.markdown(f"""
-        <div style='display: flex; flex-direction: column; align-items: center;
+        <div style='display: flex; justify-content: space-between; align-items: center;
                     padding: 12px 25px; background-color: #f9f9f9; border-bottom: 1px solid #ddd;'>
-            <h2 style='color: red;'>🤖 AFRILAND IA</h2>
-            <h3 style='color: red; margin-top: -15px;'>IA - FIRST BANK</h3>
+           <center> <h2 style='color: red;'>🤖 AFRILAND IA</h2></center>
         </div>
     """, unsafe_allow_html=True)
 
@@ -84,3 +151,9 @@ def main_page():
             st.session_state.active_input = user_input.strip()
             st.session_state.history.append(user_input.strip())
             st.rerun()
+
+# ------------------ LANCEMENT ------------------
+if not st.session_state.authenticated:
+    login_page()
+else:
+    main_page()   
