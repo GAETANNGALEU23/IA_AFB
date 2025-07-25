@@ -27,7 +27,7 @@ init_session_state()
 # ------------------ LOGO AFRILAND ------------------
 @st.cache_resource
 def get_logo():
-    return Image.open("pppp.png")
+    return Image.open("afriland_logo_1.png")
 
 # ------------------ PAGE DE CONNEXION ------------------
 def login_page():
