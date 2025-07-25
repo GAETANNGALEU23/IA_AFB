@@ -33,70 +33,32 @@ def get_logo():
 
 # ------------------ PAGE DE CONNEXION ------------------
 
-
 def login_page():
     st.markdown("""
         <style>
-            .login-container {
+            .centered {
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
                 align-items: center;
-                height: 90vh;
-            }
-
-            .login-box {
-                background-color: #ffffff;
-                padding: 40px 30px;
-                border-radius: 16px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                width: 100%;
-                max-width: 400px;
+                justify-content: start
+                padding-top: 100px;
                 text-align: center;
             }
-
-            .login-title {
-                color: #c40000;
-                font-size: 24px;
-                font-weight: 700;
-                margin-bottom: 30px;
-            }
-
-            .stTextInput > div > div > input {
-                padding: 10px;
-                border-radius: 8px;
-                border: 1px solid #ccc;
-            }
-
-            .stTextInput > div {
-                margin-bottom: 20px;
-            }
-
-            .stButton > button {
-                background-color: #c40000;
+            .stButton button {
+                background-color: red;
                 color: white;
                 font-weight: bold;
-                border: none;
-                border-radius: 10px;
-                padding: 12px 24px;
-                width: 100%;
-                font-size: 16px;
-            }
-
-            .logo-img {
-                margin-bottom: 20px;
+                border-radius: 8px;
+                padding: 10px 30px;
             }
         </style>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="login-container"><div class="login-box">', unsafe_allow_html=True)
-
-    st.image(get_logo(), width=100, output_format="PNG", use_column_width=False)
-    st.markdown('<div class="login-title">CONNEXION IA - FIRST BANK</div>', unsafe_allow_html=True)
-
+    st.markdown('<div class="centered">', unsafe_allow_html=True)
+    st.image(get_logo(), width=180)
+    st.markdown("## CONNEXION IA - FIRST BANK")
     email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
-    password = st.text_input("Mot de passe", placeholder="Entrez votre mot de passe", type="password")
-
+    password = st.text_input("Mot de passe", type="password")
     if st.button("Connexion"):
         if email in USERS and USERS[email] == password:
             st.session_state.authenticated = True
@@ -104,11 +66,7 @@ def login_page():
             st.rerun()
         else:
             st.error("Email ou mot de passe incorrect.")
-
-    st.markdown('</div></div>', unsafe_allow_html=True)
-
-
-
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ------------------ PAGE PRINCIPALE ------------------
