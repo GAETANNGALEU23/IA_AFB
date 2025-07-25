@@ -35,53 +35,37 @@ def get_logo():
 def login_page():
     st.markdown("""
         <style>
-            .main {
-                background-color: #f0f2f6;
-            }
             .centered {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
-                height: 100vh;
+                justify-content: start
+                padding-top: 100px;
                 text-align: center;
-            }
-            .login-box {
-                background-color: white;
-                padding: 40px;
-                border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                width: 400px;
             }
             .stButton button {
                 background-color: red;
                 color: white;
                 font-weight: bold;
                 border-radius: 8px;
-                padding: 10px 10px;
-                width: 100%;
-            }
-            [data-testid="stAppViewContainer"] {
-                background-color: #f0f2f6;
+                padding: 10px 30px;
             }
         </style>
     """, unsafe_allow_html=True)
 
     st.markdown('<div class="centered">', unsafe_allow_html=True)
-    st.markdown('<div class="login-box">', unsafe_allow_html=True)
     st.image(get_logo(), width=180)
     st.markdown("## CONNEXION IA - FIRST BANK")
     email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
     password = st.text_input("Mot de passe", type="password")
-    if st.button("CONNEXION"):
+    if st.button("Connexion"):
         if email in USERS and USERS[email] == password:
             st.session_state.authenticated = True
             st.session_state.email = email
             st.rerun()
         else:
             st.error("Email ou mot de passe incorrect.")
-    st.markdown('</div></div>', unsafe_allow_html=True)
-
+    st.markdown('</div>', unsafe_allow_html=True)
 # ------------------ PAGE PRINCIPALE ------------------
 def main_page():
     # ---------------- Sidebar ----------------
