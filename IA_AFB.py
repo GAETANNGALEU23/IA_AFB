@@ -1,6 +1,19 @@
 import streamlit as st
 from PIL import Image
 
+
+# Masquer le menu Streamlit et le footer
+hide_streamlit_style = """
+    <style>
+    #MainMenu {visibility: hidden;}   /* Masque le menu hamburger */
+    footer {visibility: hidden;}     /* Masque le footer "Made with Streamlit" */
+    header {visibility: hidden;}     /* Masque l'en-tête par défaut */
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+
+
 # ------------------ CONFIGURATION ------------------
 st.set_page_config(page_title="AFRILAND IA", layout="wide")
 
