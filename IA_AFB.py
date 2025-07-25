@@ -40,7 +40,7 @@ def login_page():
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: start
+                justify-content: start;
                 padding-top: 20px;
                 text-align: center;
             }
