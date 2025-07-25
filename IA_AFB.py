@@ -41,15 +41,15 @@ def login_page():
                 flex-direction: column;
                 align-items: center;
                 justify-content: start
-                padding-top: 100px;
+                padding-top: 50px;
                 text-align: center;
             }
             .stButton button {
                 background-color: red;
                 color: white;
                 font-weight: bold;
-                border-radius: 8px;
-                padding: 10px 30px;
+                border-radius: 5px;
+                padding: 5px 10px;
             }
         </style>
     """, unsafe_allow_html=True)
