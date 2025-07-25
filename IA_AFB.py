@@ -142,7 +142,7 @@ def main_page():
 
     st.download_button("📥 Télécharger",
                        data=st.session_state.active_input.encode(),
-                       file_name="question.txt")
+                       file_name="question.xlsx")
 
     # Zone de saisie (type ChatGPT)
     with st.form("form_input", clear_on_submit=True):
