@@ -1,6 +1,5 @@
 import streamlit as st
 from PIL import Image
-import datetime
 
 # ------------------ CONFIGURATION ------------------
 st.set_page_config(page_title="AFRILAND IA", layout="wide")
@@ -86,24 +85,23 @@ def main_page():
         
         st.markdown("---")
 
-        with st.expander("👤 My Profile", expanded=False):
+        with st.expander("👤 Mon Profil", expanded=False):
             st.markdown(f"**{st.session_state.email}**")
             if st.button("🔓 Déconnexion"):
                 st.session_state.authenticated = False
                 st.session_state.email = ""
                 st.rerun()
 
-    # --------------- HEADER -----------------
-    st.markdown(f"""
-        <div style='position: fixed; top: 0; left: 0; width: 100%;
-                    background-color: #f9f9f9; border-bottom: 1px solid #ddd;
-                    padding: 10px 20px; z-index: 1000;'>
-            <h3 style='margin: 0; color: red;'>🤖 AFRILAND - IA</h3>
-        </div>
-        <div style='height: 60px'></div>
-    """, unsafe_allow_html=True)
+    # --------------- TÊTE DE PAGE -----------------
+    col1, col2 = st.columns([1, 9])
+    with col1:
+        if st.button("🤖 IA - AFRILAND", use_container_width=True):
+            st.session_state.active_input = ""
+            st.rerun()
 
-    # --------------- MAIN CONTENT --------------
+    st.markdown("<hr>", unsafe_allow_html=True)
+
+    # --------------- CONTENU PRINCIPAL --------------
     st.markdown("""
         <style>
             .chat-container {
@@ -138,9 +136,13 @@ def main_page():
                        data=st.session_state.active_input.encode(),
                        file_name="question.txt")
 
+    # Zone de saisie + bouton ➤ à droite
     with st.form("form_input", clear_on_submit=True):
-        user_input = st.text_input("Pose ta question à l'IA ici...", value="", label_visibility="collapsed")
-        submitted = st.form_submit_button("➤")
+        col1, col2 = st.columns([6, 1])
+        with col1:
+            user_input = st.text_input("Pose ta question à l'IA ici...", value="", label_visibility="collapsed")
+        with col2:
+            submitted = st.form_submit_button("➤")
         st.markdown('</div></div>', unsafe_allow_html=True)
 
         if submitted and user_input.strip():
