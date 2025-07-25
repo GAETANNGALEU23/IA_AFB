@@ -1,116 +1,35 @@
-# ------------------ PAGE DE CONNEXION STYLE POPUP ------------------
-def login_page():
-    st.markdown("""
-        <style>
-            /* Fond principal semi-transparent */
-            .main {
-                background-color: rgba(0, 0, 0, 0.5) !important;
-            }
-            
-            /* Conteneur du popup */
-            .login-popup {
-                position: relative;
-                max-width: 400px;
-                margin: 100px auto 0;
-                padding: 2.5rem;
-                background: white;
-                border-radius: 15px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-                animation: fadeIn 0.3s ease-out;
-            }
-            
-            /* Animation d'apparition */
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            
-            /* Style du logo */
-            .login-logo {
-                margin: 0 auto 1.5rem;
-                display: block;
-                width: 120px;
-            }
-            
-            /* Titre */
-            .login-title {
-                color: #d40000;
-                text-align: center;
-                font-size: 1.5rem;
-                margin-bottom: 1.8rem;
-                font-weight: 600;
-            }
-            
-            /* Champs de formulaire */
-            .stTextInput input {
-                border: 1px solid #ddd !important;
-                border-radius: 8px !important;
-                padding: 12px 15px !important;
-                margin-bottom: 1rem;
-            }
-            
-            /* Bouton de connexion */
-            .stButton button {
-                width: 100%;
-                background-color: #d40000 !important;
-                color: white !important;
-                font-weight: 600 !important;
-                border-radius: 8px !important;
-                padding: 12px 0 !important;
-                margin-top: 10px;
-                border: none !important;
-                transition: all 0.3s;
-            }
-            
-            .stButton button:hover {
-                background-color: #b30000 !important;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            
-            /* Pied de page */
-            .login-footer {
-                text-align: center;
-                margin-top: 1.5rem;
-                color: #666;
-                font-size: 0.8rem;
-            }
-            
-            /* Message d'erreur */
-            .stAlert {
-                border-radius: 8px !important;
-            }
-        </style>
-    """, unsafe_allow_html=True)
+import streamlit as st
+from PIL import Image
+import datetime
 
-    # Structure HTML du popup
-    st.markdown("""
-        <div class="login-popup">
-            <img src="https://www.afrilandfirstbank.com/wp-content/uploads/2021/06/logo-afriland-first-bank.png" class="login-logo">
-            <h2 class="login-title">Connexion Sécurisée</h2>
-    """, unsafe_allow_html=True)
-    
-    # Champs de formulaire
-    email = st.text_input("", placeholder="Adresse email professionnelle", key="login_email")
-    password = st.text_input("", type="password", placeholder="Mot de passe", key="login_password")
-    
-    # Bouton de connexion
-    if st.button("Se connecter", key="login_button"):
-        if email in USERS and USERS[email] == password:
-            st.session_state.authenticated = True
-            st.session_state.email = email
-            st.rerun()
-        else:
-            st.error("Identifiants incorrects. Veuillez réessayer.")
-    
-    # Pied de page
-    st.markdown("""
-            <p class="login-footer">
-                Système sécurisé © 2023 Afriland First Bank<br>
-                <em>Vos informations sont cryptées</em>
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
+
+# ------------------ CONFIGURATION ------------------
+st.set_page_config(page_title="AFRILAND IA", layout="wide")
+
+USERS = {
+    "user@afriland.cm": "password123",
+    "admin@afriland.cm": "adminpass"
+}
+
+# ------------------ INITIALISATION ------------------
+def init_session_state():
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+    if "email" not in st.session_state:
+        st.session_state.email = ""
+    if "history" not in st.session_state:
+        st.session_state.history = []
+    if "active_input" not in st.session_state:
+        st.session_state.active_input = ""
+    if "new_input" not in st.session_state:
+        st.session_state.new_input = ""
+
+init_session_state()
+
+# ------------------ LOGO AFRILAND ------------------
+@st.cache_resource
+def get_logo():
+    return Image.open("afriland_logo_1.png")
 
 # ------------------ PAGE DE CONNEXION ------------------
 def login_page():
@@ -147,6 +66,7 @@ def login_page():
         else:
             st.error("Email ou mot de passe incorrect.")
     st.markdown('</div>', unsafe_allow_html=True)
+
 # ------------------ PAGE PRINCIPALE ------------------
 def main_page():
     # ---------------- Sidebar ----------------
