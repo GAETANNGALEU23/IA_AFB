@@ -234,6 +234,7 @@ def main_page():
             st.rerun()
 
 # ------------------ LANCEMENT ------------------
+
 if not st.session_state.authenticated:
     login_page()
 else:
