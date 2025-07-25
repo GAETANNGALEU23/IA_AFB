@@ -39,7 +39,7 @@ def login_page():
                 flex-direction: column;
                 align-items: center;
                 justify-content: start;
-                padding-top: 40px;
+                padding-top: 20px;
                 text-align: center;
             }
             .stButton button {
@@ -47,14 +47,7 @@ def login_page():
                 color: white;
                 font-weight: bold;
                 border-radius: 3px;
-                padding: 6px 12px;
-            }
-            .element-container:has(input) input {
-                background-color: #ffffff;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                padding: 10px;
-                font-size: 16px;
+                padding: 3px 5px;
             }
         </style>
     """, unsafe_allow_html=True)
@@ -75,7 +68,7 @@ def login_page():
 
 # ------------------ PAGE PRINCIPALE ------------------
 def main_page():
-    # --------------- SIDEBAR -----------------
+    # Sidebar
     with st.sidebar:
         st.image(get_logo(), width=120)
         st.markdown("### Historique")
@@ -83,9 +76,8 @@ def main_page():
             if st.button(f"🕘 {hist[:25]}...", key=f"hist_{idx}"):
                 st.session_state.active_input = hist
                 st.rerun()
-        
-        st.markdown("---")
 
+        st.markdown("---")
         with st.expander("👤 My Profile", expanded=False):
             st.markdown(f"**{st.session_state.email}**")
             if st.button("🔓 Déconnexion"):
@@ -93,55 +85,79 @@ def main_page():
                 st.session_state.email = ""
                 st.rerun()
 
-    # --------------- HEADER -----------------
-    st.markdown(f"""
-        <div style='position: fixed; top: 0; left: 0; width: 100%;
-                    background-color: #f9f9f9; border-bottom: 1px solid #ddd;
-                    padding: 10px 20px; z-index: 1000;'>
-            <h3 style='margin: 0; color: red;'>🤖 AFRILAND - IA</h3>
-        </div>
-        <div style='height: 60px'></div>
-    """, unsafe_allow_html=True)
-
-    # --------------- MAIN CONTENT --------------
+    # Header avec bouton IA - AFRILAND cliquable
     st.markdown("""
         <style>
-            .chat-container {
-                max-width: 900px;
-                margin: auto;
-                padding: 30px 20px;
-            }
-            .element-container:has(input) input {
-                background-color: #ffffff;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                padding: 10px;
-                font-size: 16px;
-            }
-            .stButton button {
-                background-color: red;
+            .header-btn {
+                background: none;
                 border: none;
-                color: white;
-                border-radius: 6px;
-                padding: 10px 16px;
-                font-size: 18px;
+                font-size: 28px;
+                color: red;
+                font-weight: bold;
                 cursor: pointer;
+                padding: 10px 20px;
+                margin-bottom: 10px;
+                text-align: left;
+            }
+            .header-container {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                border-bottom: 1px solid #ddd;
+                background-color: #fff;
             }
         </style>
-        <div class="chat-container">
+        <div class="header-container">
+            <form action="" method="post">
+                <button class="header-btn" name="reset_input">🤖 IA - AFRILAND</button>
+            </form>
+        </div>
     """, unsafe_allow_html=True)
+
+    if st.query_params.get("reset_input") is not None:
+        st.session_state.active_input = ""
 
     if st.session_state.active_input:
         st.info(f"**Dernière question :** {st.session_state.active_input}")
 
-    st.download_button("📥 Télécharger",
-                       data=st.session_state.active_input.encode(),
-                       file_name="question.txt")
+    # Zone de saisie type ChatGPT sans cadre ni fond gris
+    st.markdown("""
+        <style>
+            .chat-input-wrapper {
+                max-width: 900px;
+                margin: 30px auto;
+                display: flex;
+                gap: 10px;
+                align-items: stretch;
+            }
+            .chat-input-wrapper textarea {
+                flex: 1;
+                border: none;
+                outline: none;
+                resize: none;
+                font-size: 16px;
+                padding: 14px;
+                border-radius: 8px;
+                background-color: white;
+                box-shadow: 0 0 0 1px #ccc;
+            }
+            .chat-input-wrapper button {
+                background-color: red;
+                color: white;
+                border: none;
+                padding: 14px 18px;
+                border-radius: 8px;
+                font-size: 18px;
+                cursor: pointer;
+            }
+        </style>
+    """, unsafe_allow_html=True)
 
     with st.form("form_input", clear_on_submit=True):
-        user_input = st.text_input("Pose ta question à l'IA ici...", value="", label_visibility="collapsed")
+        st.markdown('<div class="chat-input-wrapper">', unsafe_allow_html=True)
         submitted = st.form_submit_button("➤")
-        st.markdown('</div></div>', unsafe_allow_html=True)
+        user_input = st.text_area("", value="", height=100, label_visibility="collapsed")
+        st.markdown('</div>', unsafe_allow_html=True)
 
         if submitted and user_input.strip():
             st.session_state.active_input = user_input.strip()
