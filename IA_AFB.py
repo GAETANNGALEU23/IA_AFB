@@ -81,7 +81,7 @@ def main_page():
         st.markdown("---")
         
         # Menu utilisateur en bas de la sidebar
-        with st.expander("👤", expanded=False):
+        with st.expander("👤 My Profile", expanded=False):
             st.markdown(f"**{st.session_state.email}**")
             if st.button("🔓 Déconnexion"):
                 st.session_state.authenticated = False
