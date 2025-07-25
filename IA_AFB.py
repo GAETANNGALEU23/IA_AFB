@@ -2,7 +2,6 @@ import streamlit as st
 from PIL import Image
 import datetime
 
-
 # ------------------ CONFIGURATION ------------------
 st.set_page_config(page_title="AFRILAND IA", layout="wide")
 
@@ -32,7 +31,6 @@ def get_logo():
     return Image.open("afriland_logo_1.png")
 
 # ------------------ PAGE DE CONNEXION ------------------
-
 def login_page():
     st.markdown("""
         <style>
@@ -41,7 +39,7 @@ def login_page():
                 flex-direction: column;
                 align-items: center;
                 justify-content: start;
-                padding-top: 20px;
+                padding-top: 40px;
                 text-align: center;
             }
             .stButton button {
@@ -49,7 +47,14 @@ def login_page():
                 color: white;
                 font-weight: bold;
                 border-radius: 3px;
-                padding: 3px 5px;
+                padding: 6px 12px;
+            }
+            .element-container:has(input) input {
+                background-color: #ffffff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 10px;
+                font-size: 16px;
             }
         </style>
     """, unsafe_allow_html=True)
@@ -68,10 +73,9 @@ def login_page():
             st.error("Email ou mot de passe incorrect.")
     st.markdown('</div>', unsafe_allow_html=True)
 
-
 # ------------------ PAGE PRINCIPALE ------------------
 def main_page():
-    # ---------------- Sidebar ----------------
+    # --------------- SIDEBAR -----------------
     with st.sidebar:
         st.image(get_logo(), width=120)
         st.markdown("### Historique")
@@ -80,10 +84,8 @@ def main_page():
                 st.session_state.active_input = hist
                 st.rerun()
         
-        # Espace pour pousser le menu utilisateur en bas
         st.markdown("---")
-        
-        # Menu utilisateur en bas de la sidebar
+
         with st.expander("👤 My Profile", expanded=False):
             st.markdown(f"**{st.session_state.email}**")
             if st.button("🔓 Déconnexion"):
@@ -91,15 +93,17 @@ def main_page():
                 st.session_state.email = ""
                 st.rerun()
 
-    # ---------------- Header ----------------
+    # --------------- HEADER -----------------
     st.markdown(f"""
-        <div style='display: flex; justify-content: space-between; align-items: center;
-                    padding: 12px 25px; background-color: #f9f9f9; border-bottom: 1px solid #ddd;'>
-             <h2 style='color: red;'>🤖 AFRILAND - IA</h2>
+        <div style='position: fixed; top: 0; left: 0; width: 100%;
+                    background-color: #f9f9f9; border-bottom: 1px solid #ddd;
+                    padding: 10px 20px; z-index: 1000;'>
+            <h3 style='margin: 0; color: red;'>🤖 AFRILAND - IA</h3>
         </div>
+        <div style='height: 60px'></div>
     """, unsafe_allow_html=True)
 
-    # ---------------- Main Content ----------------
+    # --------------- MAIN CONTENT --------------
     st.markdown("""
         <style>
             .chat-container {
@@ -107,24 +111,14 @@ def main_page():
                 margin: auto;
                 padding: 30px 20px;
             }
-            .input-box {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                background-color: #f0f2f6;
+            .element-container:has(input) input {
+                background-color: #ffffff;
                 border: 1px solid #ccc;
-                border-radius: 10px;
+                border-radius: 8px;
                 padding: 10px;
+                font-size: 16px;
             }
-            .input-box textarea {
-                flex: 1;
-                border: none;
-                resize: none;
-                background-color: transparent;
-                font-size: 16px
-                padding-top: 10px;
-            }
-            .input-box button {
+            .stButton button {
                 background-color: red;
                 border: none;
                 color: white;
@@ -140,13 +134,12 @@ def main_page():
     if st.session_state.active_input:
         st.info(f"**Dernière question :** {st.session_state.active_input}")
 
-    #st.download_button("📥 Télécharger",
-                       #data=st.session_state.active_input.encode(),
-                       #file_name="question.xlsx")
+    st.download_button("📥 Télécharger",
+                       data=st.session_state.active_input.encode(),
+                       file_name="question.txt")
 
-    # Zone de saisie (type ChatGPT)
     with st.form("form_input", clear_on_submit=True):
-        user_input = st.text_area("", value="", height=80, label_visibility="collapsed")
+        user_input = st.text_input("Pose ta question à l'IA ici...", value="", label_visibility="collapsed")
         submitted = st.form_submit_button("➤")
         st.markdown('</div></div>', unsafe_allow_html=True)
 
@@ -156,8 +149,7 @@ def main_page():
             st.rerun()
 
 # ------------------ LANCEMENT ------------------
-
 if not st.session_state.authenticated:
     login_page()
 else:
-    main_page()   
+    main_page()
