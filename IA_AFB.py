@@ -35,13 +35,23 @@ def get_logo():
 def login_page():
     st.markdown("""
         <style>
+            .main {
+                background-color: #f0f2f6;
+            }
             .centered {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: start
-                padding-top: 50px;
+                justify-content: center;
+                height: 100vh;
                 text-align: center;
+            }
+            .login-box {
+                background-color: white;
+                padding: 40px;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                width: 400px;
             }
             .stButton button {
                 background-color: red;
@@ -49,11 +59,16 @@ def login_page():
                 font-weight: bold;
                 border-radius: 8px;
                 padding: 10px 10px;
+                width: 100%;
+            }
+            [data-testid="stAppViewContainer"] {
+                background-color: #f0f2f6;
             }
         </style>
     """, unsafe_allow_html=True)
 
     st.markdown('<div class="centered">', unsafe_allow_html=True)
+    st.markdown('<div class="login-box">', unsafe_allow_html=True)
     st.image(get_logo(), width=180)
     st.markdown("## CONNEXION IA - FIRST BANK")
     email = st.text_input("Adresse email", placeholder="votre.email@afriland.cm")
@@ -65,7 +80,7 @@ def login_page():
             st.rerun()
         else:
             st.error("Email ou mot de passe incorrect.")
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div></div>', unsafe_allow_html=True)
 
 # ------------------ PAGE PRINCIPALE ------------------
 def main_page():
@@ -77,23 +92,23 @@ def main_page():
             if st.button(f"🕘 {hist[:25]}...", key=f"hist_{idx}"):
                 st.session_state.active_input = hist
                 st.rerun()
+        
+        # Espace pour pousser le menu utilisateur en bas
         st.markdown("---")
+        
+        # Menu utilisateur en bas de la sidebar
+        with st.expander("👤 Paramètres utilisateur", expanded=False):
+            st.markdown(f"**{st.session_state.email}**")
+            if st.button("🔓 Déconnexion"):
+                st.session_state.authenticated = False
+                st.session_state.email = ""
+                st.rerun()
 
     # ---------------- Header ----------------
     st.markdown(f"""
         <div style='display: flex; justify-content: space-between; align-items: center;
                     padding: 12px 25px; background-color: #f9f9f9; border-bottom: 1px solid #ddd;'>
             <h2 style='color: red;'>🤖 AFRILAND IA</h2>
-            <div style='display: flex; align-items: center; gap: 20px;'>
-                <span style='font-weight: bold;'>👤 {st.session_state.email}</span>
-                <form action="" method="post">
-                    <button style='background-color: red; color: white; border: none; padding: 8px 18px; 
-                                   border-radius: 8px; cursor: pointer;' 
-                            onClick="window.location.reload();">
-                        🔓 Déconnexion
-                    </button>
-                </form>
-            </div>
         </div>
     """, unsafe_allow_html=True)
 
