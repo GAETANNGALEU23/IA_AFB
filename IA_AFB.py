@@ -95,7 +95,7 @@ def main_page():
     # --------------- TÊTE DE PAGE -----------------
     col1, col2 = st.columns([1, 9])
     with col1:
-        if st.button("🤖 IA - AFRILAND", use_container_width=True):
+        if st.button("🤖 IA - AFB", use_container_width=True):
             st.session_state.active_input = ""
             st.rerun()
 
@@ -132,9 +132,9 @@ def main_page():
     if st.session_state.active_input:
         st.info(f"**Dernière question :** {st.session_state.active_input}")
 
-    st.download_button("📥 Télécharger",
-                       data=st.session_state.active_input.encode(),
-                       file_name="question.txt")
+    #st.download_button("📥 Télécharger",
+                       #data=st.session_state.active_input.encode(),
+                       #file_name="question.txt")
 
     # Zone de saisie + bouton ➤ à droite
     with st.form("form_input", clear_on_submit=True):
